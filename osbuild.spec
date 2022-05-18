@@ -41,7 +41,7 @@ Requires:       (%{name}-selinux if selinux-policy-%{selinuxtype})
 # Turn off dependency generators for runners. The reason is that runners are
 # tailored to the platform, e.g. on RHEL they are using platform-python. We
 # don't want to pick up those dependencies on other platform.
-%global __requires_exclude_from ^%{pkgdir}/(runners)/.*$
+%global __requires_exclude_from ^%{pkgdir}/modules/(runners)/.*$
 
 # Turn off shebang mangling on RHEL. brp-mangle-shebangs (from package
 # redhat-rpm-config) is run on all executables in a package after the `install`
@@ -55,7 +55,7 @@ Requires:       (%{name}-selinux if selinux-policy-%{selinuxtype})
 # generator, this also means that an additional dependency on /usr/bin/python3
 # will be added. This is intended and needed, so that in the host build root
 # /usr/bin/python3 is present so stages and assemblers can be run.
-%global __brp_mangle_shebangs_exclude_from ^%{pkgdir}/(assemblers|runners|stages)/.*$
+%global __brp_mangle_shebangs_exclude_from ^%{pkgdir}/modules/(assemblers|runners|stages)/.*$
 
 %{?python_enable_dependency_generator}
 
@@ -135,26 +135,26 @@ bzip2 -9 osbuild.pp
 %install
 %py3_install
 
-mkdir -p %{buildroot}%{pkgdir}/stages
-install -p -m 0755 $(find stages -type f) %{buildroot}%{pkgdir}/stages/
+mkdir -p %{buildroot}%{pkgdir}/modules/stages
+install -p -m 0755 $(find modules/stages -type f) %{buildroot}%{pkgdir}/modules/stages/
 
-mkdir -p %{buildroot}%{pkgdir}/assemblers
-install -p -m 0755 $(find assemblers -type f) %{buildroot}%{pkgdir}/assemblers/
+mkdir -p %{buildroot}%{pkgdir}/modules/assemblers
+install -p -m 0755 $(find modules/assemblers -type f) %{buildroot}%{pkgdir}/modules/assemblers/
 
-mkdir -p %{buildroot}%{pkgdir}/runners
-install -p -m 0755 $(find runners -type f -or -type l) %{buildroot}%{pkgdir}/runners
+mkdir -p %{buildroot}%{pkgdir}/modules/runners
+install -p -m 0755 $(find modules/runners -type f -or -type l) %{buildroot}%{pkgdir}/modules/runners
 
-mkdir -p %{buildroot}%{pkgdir}/sources
-install -p -m 0755 $(find sources -type f) %{buildroot}%{pkgdir}/sources
+mkdir -p %{buildroot}%{pkgdir}/modules/sources
+install -p -m 0755 $(find modules/sources -type f) %{buildroot}%{pkgdir}/modules/sources
 
-mkdir -p %{buildroot}%{pkgdir}/devices
-install -p -m 0755 $(find devices -type f) %{buildroot}%{pkgdir}/devices
+mkdir -p %{buildroot}%{pkgdir}/modules/devices
+install -p -m 0755 $(find modules/devices -type f) %{buildroot}%{pkgdir}/modules/devices
 
-mkdir -p %{buildroot}%{pkgdir}/inputs
-install -p -m 0755 $(find inputs -type f) %{buildroot}%{pkgdir}/inputs
+mkdir -p %{buildroot}%{pkgdir}/modules/inputs
+install -p -m 0755 $(find modules/inputs -type f) %{buildroot}%{pkgdir}/modules/inputs
 
-mkdir -p %{buildroot}%{pkgdir}/mounts
-install -p -m 0755 $(find mounts -type f) %{buildroot}%{pkgdir}/mounts
+mkdir -p %{buildroot}%{pkgdir}/modules/mounts
+install -p -m 0755 $(find modules/mounts -type f) %{buildroot}%{pkgdir}/modules/mounts
 
 # mount point for bind mounting the osbuild library
 mkdir -p %{buildroot}%{pkgdir}/osbuild
@@ -192,18 +192,18 @@ exit 0
 %{pkgdir}
 %{_udevrulesdir}/*.rules
 # the following files are in the lvm2 sub-package
-%exclude %{pkgdir}/devices/org.osbuild.lvm2*
-%exclude %{pkgdir}/stages/org.osbuild.lvm2*
+%exclude %{pkgdir}/modules/devices/org.osbuild.lvm2*
+%exclude %{pkgdir}/modules/stages/org.osbuild.lvm2*
 # the following files are in the luks2 sub-package
-%exclude %{pkgdir}/devices/org.osbuild.luks2*
-%exclude %{pkgdir}/stages/org.osbuild.crypttab
-%exclude %{pkgdir}/stages/org.osbuild.luks2*
+%exclude %{pkgdir}/modules/devices/org.osbuild.luks2*
+%exclude %{pkgdir}/modules/stages/org.osbuild.crypttab
+%exclude %{pkgdir}/modules/stages/org.osbuild.luks2*
 # the following files are in the ostree sub-package
-%exclude %{pkgdir}/assemblers/org.osbuild.ostree*
-%exclude %{pkgdir}/inputs/org.osbuild.ostree*
-%exclude %{pkgdir}/sources/org.osbuild.ostree*
-%exclude %{pkgdir}/stages/org.osbuild.ostree*
-%exclude %{pkgdir}/stages/org.osbuild.rpm-ostree
+%exclude %{pkgdir}/modules/assemblers/org.osbuild.ostree*
+%exclude %{pkgdir}/modules/inputs/org.osbuild.ostree*
+%exclude %{pkgdir}/modules/sources/org.osbuild.ostree*
+%exclude %{pkgdir}/modules/stages/org.osbuild.ostree*
+%exclude %{pkgdir}/modules/stages/org.osbuild.rpm-ostree
 
 %files -n       python3-%{pypi_name}
 %license LICENSE
@@ -212,20 +212,20 @@ exit 0
 %{python3_sitelib}/%{pypi_name}/
 
 %files lvm2
-%{pkgdir}/devices/org.osbuild.lvm2*
-%{pkgdir}/stages/org.osbuild.lvm2*
+%{pkgdir}/modules/devices/org.osbuild.lvm2*
+%{pkgdir}/modules/stages/org.osbuild.lvm2*
 
 %files luks2
-%{pkgdir}/devices/org.osbuild.luks2*
-%{pkgdir}/stages/org.osbuild.crypttab
-%{pkgdir}/stages/org.osbuild.luks2*
+%{pkgdir}/modules/devices/org.osbuild.luks2*
+%{pkgdir}/modules/stages/org.osbuild.crypttab
+%{pkgdir}/modules/stages/org.osbuild.luks2*
 
 %files ostree
-%{pkgdir}/assemblers/org.osbuild.ostree*
-%{pkgdir}/inputs/org.osbuild.ostree*
-%{pkgdir}/sources/org.osbuild.ostree*
-%{pkgdir}/stages/org.osbuild.ostree*
-%{pkgdir}/stages/org.osbuild.rpm-ostree
+%{pkgdir}/modules/assemblers/org.osbuild.ostree*
+%{pkgdir}/modules/inputs/org.osbuild.ostree*
+%{pkgdir}/modules/sources/org.osbuild.ostree*
+%{pkgdir}/modules/stages/org.osbuild.ostree*
+%{pkgdir}/modules/stages/org.osbuild.rpm-ostree
 
 %files selinux
 %{_datadir}/selinux/packages/%{selinuxtype}/%{name}.pp.bz2

@@ -15,7 +15,7 @@ from osbuild.monitor import LogMonitor, NullMonitor
 from osbuild.pipeline import detect_host_runner
 from osbuild.util import linux
 
-from ..test import TestBase
+from ..test import TestBase, LIBRARY_PATH
 
 
 @pytest.fixture(name="tempdir")
@@ -27,7 +27,7 @@ def tempdir_fixture():
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_basic(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -48,7 +48,7 @@ def test_basic(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_runner_fail(tempdir):
     runner = "org.osbuild.nonexistantrunner"
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -72,7 +72,7 @@ def test_runner_fail(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_output(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -91,7 +91,7 @@ def test_output(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_bind_mounts(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -129,7 +129,7 @@ def test_selinuxfs_ro(tempdir):
     # of the host is the valid policy
 
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -151,7 +151,7 @@ def test_selinuxfs_ro(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_proc_overrides(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -170,7 +170,7 @@ def test_proc_overrides(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_timeout(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -190,7 +190,7 @@ def test_timeout(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_env_isolation(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 
@@ -232,7 +232,7 @@ def test_env_isolation(tempdir):
 @pytest.mark.skipif(not TestBase.can_bind_mount(), reason="root only")
 def test_caps(tempdir):
     runner = detect_host_runner()
-    libdir = os.path.abspath(os.curdir)
+    libdir = os.path.abspath(LIBRARY_PATH)
     var = pathlib.Path(tempdir, "var")
     var.mkdir()
 

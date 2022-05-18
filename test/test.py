@@ -15,6 +15,10 @@ import osbuild.meta
 from osbuild.util import linux
 
 
+LIBRARY_PATH = os.curdir
+MODULE_PATH = LIBRARY_PATH + "/modules"
+
+
 class TestBase(unittest.TestCase):
     """Base Class for Tests
 
