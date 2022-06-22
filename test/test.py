@@ -70,6 +70,12 @@ class TestBase(unittest.TestCase):
         return TestBase.have_test_checkout()
 
     @staticmethod
+    def locate_modules() -> str:
+        """Locate Modules Path"""
+
+        return os.path.join(TestBase.locate_test_checkout(), "modules")
+
+    @staticmethod
     def locate_test_data() -> str:
         """Locate Test-Data Path
 
@@ -371,7 +377,7 @@ class OSBuild(contextlib.AbstractContextManager):
         are defined.
         """
 
-        index = osbuild.meta.Index(os.curdir)
+        index = osbuild.meta.Index(TestBase.locate_modules())
 
         manifest_json = json.loads(manifest_data)
 
@@ -422,3 +428,4 @@ class OSBuild(contextlib.AbstractContextManager):
             "cp", "--reflink=auto", "-a",
             os.path.join(from_path, "."), to_path
         ], check=True)
+
