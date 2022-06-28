@@ -1,0 +1,46 @@
+#!/usr/bin/python3
+"""
+The `org.osbuild.breadcrumb.image-builder` stage is a breadcrumb stage to put
+artifacts in the built image that can identify the `image-builder` build-job
+and settings used to produce the image as built by `osbuild`.
+"""
+
+import os
+import sys
+import json
+
+import osbuild.api
+
+
+SCHEMA = r"""
+"definitions": {
+  "uuid": {
+    "type": "string",
+    "pattern": "^[a-zA-Z0-9-]+$"
+  }
+},
+"properties": {
+  "build-identifier": {
+    "$ref": "#/definitions/uuid",
+    "description": "A unique identifier to look up the related build."
+  }
+}
+"""
+
+
+def main(tree, options):
+    path = os.path.join(tree, "usr", "share", "osbuild", "self")
+    file = os.path.join(path, "image-builder.json")
+
+    os.makedirs(path, exist_ok=True)
+
+    with open(file, "w", encoding="utf-8") as f:
+        json.dump(options, f)
+
+    return 0
+
+
+if __name__ == '__main__':
+    args = osbuild.api.arguments()
+    r = main(args["tree"], args["options"])
+    sys.exit(r)
