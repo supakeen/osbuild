@@ -116,6 +116,9 @@ def rev_parse(repo: PathLike, ref: str) -> str:
 
     repo = os.fspath(repo)
 
+    if isinstance(repo, bytes):
+        repo = repo.decode("utf8")
+
     r = subprocess.run(["ostree", "rev-parse", ref, f"--repo={repo}"],
                        encoding="utf-8",
                        stdout=subprocess.PIPE,
@@ -133,6 +136,9 @@ def show(repo: PathLike, checksum: str) -> str:
     """Show the metada of an OSTree object pointed by `checksum` in the repository at `repo`"""
 
     repo = os.fspath(repo)
+
+    if isinstance(repo, bytes):
+        repo = repo.decode("utf8")
 
     r = subprocess.run(["ostree", "show", f"--repo={repo}", checksum],
                        encoding="utf-8",

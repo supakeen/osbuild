@@ -92,7 +92,7 @@ class ServiceProtocol:
         return t, d
 
     @staticmethod
-    def encode_method(name: str, arguments: List):
+    def encode_method(name: str, arguments: List[str]):
         msg = {
             "type": "method",
             "data": {
@@ -349,13 +349,19 @@ class ServiceClient:
         return ret
 
     def call_with_fds(self, method: str,
-                      args: Optional[Any] = None,
-                      fds: Optional[List] = None,
+                      args: Optional[List[str]] = None,
+                      fds: Optional[List[int]] = None,
                       on_signal: Callable[[Any, FdSet], None] = None) -> Tuple[Any, FdSet]:
         """
         Remotely call a method and return the result, including file
         descriptors.
         """
+
+        if args is None:
+            args = []
+
+        if fds is None:
+            fds = []
 
         msg = self.protocol.encode_method(method, args)
 
@@ -366,7 +372,9 @@ class ServiceClient:
             kind, data = self.protocol.decode_message(ret)
             if kind == "signal":
                 ret = self.protocol.decode_reply(data)
-                on_signal(ret, fds)
+
+                if on_signal:
+                    on_signal(ret, fds)
             if kind == "reply":
                 ret = self.protocol.decode_reply(data)
                 return ret, fds

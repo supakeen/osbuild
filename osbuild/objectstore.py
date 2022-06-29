@@ -3,7 +3,7 @@ import os
 import subprocess
 import tempfile
 import uuid
-from typing import Optional
+from typing import Optional, Iterator, Set
 
 from osbuild.util.types import PathLike
 from osbuild.util import jsoncomm, rmrf
@@ -93,7 +93,7 @@ class Object:
         return path
 
     @contextlib.contextmanager
-    def write(self) -> str:
+    def write(self) -> Iterator[str]:
         """Return a path that can be written to"""
         self._check_writable()
         self._check_readers()
@@ -110,13 +110,13 @@ class Object:
                 self._writer = False
 
     @contextlib.contextmanager
-    def read(self) -> str:
+    def read(self) -> Iterator[str]:
         with self.tempdir("reader") as target:
             with self.read_at(target) as path:
                 yield path
 
     @contextlib.contextmanager
-    def read_at(self, target: PathLike, path: str = "/") -> str:
+    def read_at(self, target: PathLike, path: str = "/") -> Iterator[str]:
         """Read the object or a part of it at given location
 
         Map the tree or a part of it specified via `path` at the
@@ -260,7 +260,7 @@ class ObjectStore(contextlib.AbstractContextManager):
         os.makedirs(self.objects, exist_ok=True)
         os.makedirs(self.refs, exist_ok=True)
         os.makedirs(self.tmp, exist_ok=True)
-        self._objs = set()
+        self._objs: Set[Object] = set()
 
     def _get_floating(self, object_id: str) -> Optional[Object]:
         """Internal: get a non-committed object"""

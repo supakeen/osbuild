@@ -29,7 +29,7 @@ import pkgutil
 import json
 import sys
 from collections import deque
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, Union, Set
 
 import jsonschema
 
@@ -50,7 +50,7 @@ class ValidationError:
 
     def __init__(self, message: str):
         self.message = message
-        self.path = deque()
+        self.path: deque[Union[int, str]] = deque()
 
     @classmethod
     def from_exception(cls, ex):
@@ -119,7 +119,7 @@ class ValidationResult:
 
     def __init__(self, origin: Optional[str]):
         self.origin = origin
-        self.errors = set()
+        self.errors: Set[ValidationError] = set()
 
     def fail(self, msg: str) -> ValidationError:
         """Add a new `ValidationError` with `msg` as message"""
@@ -426,7 +426,7 @@ class ModuleInfo:
         tree = ast.parse(data, name)
 
         docstring = ast.get_docstring(tree)
-        doclist = docstring.split("\n")
+        doclist = docstring.split("\n") if docstring else []
 
         assigns = filter_type(tree.body, ast.Assign)
         values = {

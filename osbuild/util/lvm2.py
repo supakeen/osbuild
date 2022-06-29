@@ -28,7 +28,7 @@ import struct
 import sys
 
 from collections import OrderedDict
-from typing import BinaryIO, Dict, Union
+from typing import BinaryIO, Dict, Union, List
 
 PathLike = Union[str, bytes, os.PathLike]
 
@@ -402,8 +402,7 @@ class Metadata:
 
     @classmethod
     def decode(cls, data: bytes) -> "Metadata":
-        data = data.decode("utf-8")
-        name, md = Metadata.decode_data(data)
+        name, md = Metadata.decode_data(data.decode("utf8"))
         return cls(name, md)
 
     def encode(self) -> bytes:
@@ -535,8 +534,7 @@ class Disk:
 
         self.lbl_hdr = None
         self.pv_hdr = None
-        self.ma_headers = []
-        self.metadata = None
+        self.ma_headers: List[MDAHeader] = []
 
         try:
             self._init_headers()
@@ -568,7 +566,7 @@ class Disk:
         self.metadata = md
 
     @classmethod
-    def open(cls, path: PathLike, *, read_only=False) -> None:
+    def open(cls, path: PathLike, *, read_only: bool = False) -> "Disk":
         mode = "rb"
         if not read_only:
             mode += "+"

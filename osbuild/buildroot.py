@@ -18,6 +18,7 @@ import time
 
 from typing import Optional
 
+from osbuild.api import BaseAPI
 from osbuild.util import linux
 
 
@@ -167,7 +168,7 @@ class BuildRoot(contextlib.AbstractContextManager):
         self._exitstack.close()
         self._exitstack = None
 
-    def register_api(self, api: "BaseAPI"):
+    def register_api(self, api: BaseAPI):
         """Register an API endpoint.
 
         The context of the API endpoint will be bound to the context of

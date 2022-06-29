@@ -102,6 +102,7 @@ class SourceService(host.Service):
         if method == "download":
             self.setup(args)
             with tempfile.TemporaryDirectory(prefix=".unverified-", dir=self.cache) as self.tmpdir:
-                return self.download(SourceService.load_items(fds)), None
+                self.download(SourceService.load_items(fds))
+                return None, None
 
         raise host.ProtocolError("Unknown method")
