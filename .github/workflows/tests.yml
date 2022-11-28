@@ -28,6 +28,7 @@ jobs:
       with:
         image: ghcr.io/osbuild/osbuild-ci:latest-202304110753
         run: |
+          python3 -m pip install .
           python3 -m pytest \
             --pyargs "${{ matrix.test }}" \
             --rootdir=. \
