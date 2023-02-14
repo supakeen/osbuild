@@ -225,19 +225,23 @@ def make_ostree(ostree: Optional[Dict]) -> List[str]:
     return [cmd]
 
 
+def make_liveimg(liveimg: Optional[Dict]) -> List[str]:
+    if not liveimg:
+        return []
+
+    url = liveimg["url"]
+    return [f"liveimg --url {url}"]
+
+
 def main(tree, options):
     path = options["path"].lstrip("/")
     ostree = options.get("ostree")
     ostree_after_install  = options.get("ostree")
+    liveimg = options.get("liveimg")
 
     config = []
     config += make_ostree(ostree)
-
-    liveimg = options.get("liveimg")
-    if liveimg:
-        url = liveimg["url"]
-        config += [f"liveimg --url {url}"]
-
+    config += make_liveimg(liveimg)
     config += make_groups(options.get("groups", {}))
     config += make_users(options.get("users", {}))
 
