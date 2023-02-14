@@ -48,7 +48,7 @@ SCHEMA = """
       }
     }
   },
-  "ostree_after_install": {
+  "post_ostree": {
     "type": "object",
     "required": ["osname", "url", "ref"],
     "additionalProperties": false,
@@ -64,7 +64,7 @@ SCHEMA = """
       },
       "remote": {
         "type": "string",
-        "description": "The remote to tie tie commit to"
+        "description": "The remote to tie the commit to"
       },
       "gpg": {
         "type": "boolean",
@@ -233,25 +233,52 @@ def make_liveimg(liveimg: Optional[Dict]) -> List[str]:
     return [f"liveimg --url {url}"]
 
 
+def post_ostree(ostree: Optional[Dict]]) -> List[str]:
+    if not ostree:
+        return []
+
+    return [
+        'ostree admin set-origin --index 0 fedora-iot https://dl.fedoraproject.org/iot/repo/ "fedora/rawhide/${arch}/iot"',
+        'ostree refs "fedora-iot:fedora/rawhide/${arch}/iot" --create "fedora-iot:fedora/rawhide/${arch}/iot"',
+        'ostree remote delete fedora-iot',
+        'ostree remote add --set=gpg-verify=true --set=gpgkeypath=/etc/pki/rpm-gpg/ --set=contenturl=mirrorlist=https://ostree.fedoraproject.org/iot/mirrorlist  fedora-iot "https://ostree.fedoraproject.org/iot"',
+    ]
+
+
 def main(tree, options):
     path = options["path"].lstrip("/")
     ostree = options.get("ostree")
-    ostree_after_install  = options.get("ostree")
     liveimg = options.get("liveimg")
 
-    config = []
-    config += make_ostree(ostree)
-    config += make_liveimg(liveimg)
-    config += make_groups(options.get("groups", {}))
-    config += make_users(options.get("users", {}))
+    # Used to reconfigure ostree in the `post` section of the kickstart file,
+    # this is necessary to update the remote as it is normally set to where
+    # the initial commit is pulled from. If an installer is used that tends to
+    # be the local filesystem which is incorrect.
+    post_ostree= options.get("post_ostree")
+
+    section_config = []
+
+    section_config += make_ostree(ostree)
+    section_config += make_liveimg(liveimg)
+    section_config += make_groups(options.get("groups", {}))
+    section_config += make_users(options.get("users", {}))
+
+    section_post = []
+
+    section_post += post_ostree(ostree_after_install)
+
+    # If there's any post section set then we need to prepend its header
+    if section_post:
+        section_post = ["post --erroronfail"] + section_post
 
     target = os.path.join(tree, path)
     base = os.path.dirname(target)
     os.makedirs(base, exist_ok=True)
 
     with open(target, "w", encoding="utf8") as f:
-        f.write("\n".join(config))
+        f.write("\n".join(section_config))
         f.write("\n")
+        f.write("\n".join(section_post))
 
     print(f"created kickstart file at: {path}\n")
 
