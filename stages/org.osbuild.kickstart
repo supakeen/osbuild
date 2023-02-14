@@ -48,6 +48,30 @@ SCHEMA = """
       }
     }
   },
+  "ostree_after_install": {
+    "type": "object",
+    "required": ["osname", "url", "ref"],
+    "additionalProperties": false,
+    "properties": {
+      "osname": {
+        "type": "string"
+      },
+      "url": {
+        "type": "string"
+      },
+      "ref": {
+        "type": "string"
+      },
+      "remote": {
+        "type": "string",
+        "description": "The remote to tie tie commit to"
+      },
+      "gpg": {
+        "type": "boolean",
+        "default": true
+      }
+    }
+  },
   "liveimg": {
     "type": "object",
     "required": ["url"],
@@ -188,6 +212,7 @@ def make_users(users: Dict) -> List[str]:
 def main(tree, options):
     path = options["path"].lstrip("/")
     ostree = options.get("ostree")
+    ostree_after_install  = options.get("ostree")
 
     config = []
 
@@ -221,7 +246,8 @@ def main(tree, options):
             f.write("\n".join(config))
         f.write("\n")
 
-    print(f"created kickstarted at: {path}\n")
+    print(f"created kickstart file at: {path}\n")
+
     with open(target, "r", encoding="utf8") as f:
         print(f.read())
 
