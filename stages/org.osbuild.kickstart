@@ -12,7 +12,7 @@ commands are supported here.
 
 import os
 import sys
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import osbuild.api
 
@@ -147,7 +147,6 @@ SCHEMA = """
 }
 """
 
-
 def make_groups(groups: Dict) -> List[str]:
     # group --name NAME [--gid GID]
 
@@ -209,25 +208,30 @@ def make_users(users: Dict) -> List[str]:
     return res
 
 
+def make_ostree(ostree: Optional[Dict]) -> List[str]:
+    if not ostree:
+        return []
+
+    osname, url, ref = ostree["osname"], ostree["url"], ostree["ref"]
+    remote = ostree.get("remote")
+
+    cmd = f"ostreesetup --osname={osname} --url={url} --ref={ref}"
+
+    if remote:
+        cmd += " --remote=" + remote
+    if not ostree.get("gpg", True):
+        cmd += " --nogpg"
+
+    return [cmd]
+
+
 def main(tree, options):
     path = options["path"].lstrip("/")
     ostree = options.get("ostree")
     ostree_after_install  = options.get("ostree")
 
     config = []
-
-    if ostree:
-        osname, url, ref = ostree["osname"], ostree["url"], ostree["ref"]
-        remote = ostree.get("remote")
-
-        cmd = f"ostreesetup --osname={osname} --url={url} --ref={ref}"
-
-        if remote:
-            cmd += " --remote=" + remote
-        if not ostree.get("gpg", True):
-            cmd += " --nogpg"
-
-        config += [cmd]
+    config += make_ostree(ostree)
 
     liveimg = options.get("liveimg")
     if liveimg:
