@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+"""
+Clean up a live ISO filesystem tree.
+"""
+
+import sys
+
+import osbuild.api
+
+SCHEMA = """
+"additionalProperties": false,
+"required": [],
+"properties": {},
+"""
+
+
+def main(tree, options):
+    pass
+
+
+if __name__ == "__main__":
+    stage_args = osbuild.api.arguments()
+    r = main(stage_args["tree"], stage_args["options"])
+    sys.exit(r)
