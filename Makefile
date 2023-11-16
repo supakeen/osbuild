@@ -112,10 +112,10 @@ FORCE:
 # deployments to our website, as well as package manager scripts.
 #
 
-MANPAGES_RST = $(wildcard $(SRCDIR)/docs/*.[0123456789].rst)
+MANPAGES_RST = $(wildcard $(SRCDIR)/manpages/*.[0123456789].rst)
 MANPAGES_TROFF = $(patsubst $(SRCDIR)/%.rst,$(BUILDDIR)/%,$(MANPAGES_RST))
 
-$(MANPAGES_TROFF): $(BUILDDIR)/docs/%: $(SRCDIR)/docs/%.rst | $(BUILDDIR)/docs/
+$(MANPAGES_TROFF): $(BUILDDIR)/manpages/%: $(SRCDIR)/manpages/%.rst | $(BUILDDIR)/manpages/
 	$(RST2MAN) "$<" "$@"
 
 .PHONY: man

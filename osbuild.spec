@@ -183,8 +183,8 @@ ln -s %{_datadir}/osbuild/schemas %{buildroot}%{pkgdir}/schemas
 # documentation
 mkdir -p %{buildroot}%{_mandir}/man1
 mkdir -p %{buildroot}%{_mandir}/man5
-install -p -m 0644 -t %{buildroot}%{_mandir}/man1/ docs/*.1
-install -p -m 0644 -t %{buildroot}%{_mandir}/man5/ docs/*.5
+install -p -m 0644 -t %{buildroot}%{_mandir}/man1/ manpages/*.1
+install -p -m 0644 -t %{buildroot}%{_mandir}/man5/ manpages/*.5
 
 # SELinux
 install -D -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %{name}.pp.bz2
