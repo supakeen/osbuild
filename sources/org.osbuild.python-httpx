@@ -90,8 +90,8 @@ class HttpxSource(sources.SourceService):
     content_type = "org.osbuild.files"
 
     # Max workers refers to max concurrent downloads in the HttpxSource and was
-    # chosed based on some arbitrary benchmarks
-    max_workers = 32
+    # chosen based on the maximum value allowed by dnf.conf
+    max_workers = 20
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
