@@ -25,7 +25,6 @@ from osbuild.util import ostree
 
 CAPABILITIES = ["CAP_MAC_ADMIN", "CAP_NET_ADMIN", "CAP_SYS_PTRACE"]
 
-
 SCHEMA_2 = """
 "options": {
   "additionalProperties": false,

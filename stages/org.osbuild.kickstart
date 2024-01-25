@@ -16,6 +16,8 @@ from typing import Dict, List
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = r"""
 "definitions": {
   "ksboolean-from-pykickstart-ref": {

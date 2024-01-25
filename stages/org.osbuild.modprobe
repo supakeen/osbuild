@@ -22,6 +22,8 @@ import sys
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = r"""
 "additionalProperties": false,
 "required": ["commands", "filename"],

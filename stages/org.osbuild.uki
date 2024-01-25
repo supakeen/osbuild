@@ -21,6 +21,8 @@ from typing import Dict, Tuple
 import osbuild
 from osbuild.util import pe32p
 
+CAPABILITIES = []
+
 SCHEMA_2 = r"""
 "options": {
   "additionalProperties": false,

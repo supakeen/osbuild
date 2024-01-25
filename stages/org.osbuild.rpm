@@ -44,6 +44,8 @@ from osbuild import api
 from osbuild.util.mnt import mount
 from osbuild.util.runners import create_machine_id_if_needed
 
+CAPABILITIES = []
+
 SCHEMA = """
 "additionalProperties": false,
 "properties": {

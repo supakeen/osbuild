@@ -14,6 +14,8 @@ import sys
 from osbuild import api
 from osbuild.util import ostree
 
+CAPABILITIES = []
+
 SCHEMA_2 = r"""
 "options": {
   "additionalProperties": false,

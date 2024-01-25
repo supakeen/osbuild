@@ -23,6 +23,8 @@ import pyalpm
 
 from osbuild import api
 
+CAPABILITIES = []
+
 SCHEMA_2 = """
 "options": {
   "type": "object",

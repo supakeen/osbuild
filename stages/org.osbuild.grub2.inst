@@ -50,6 +50,8 @@ from typing import BinaryIO, Dict
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = r"""
 "definitions": {
     "core-mkimage": {

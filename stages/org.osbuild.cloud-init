@@ -22,6 +22,8 @@ import yaml
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = r"""
 "definitions": {
   "reporting_handlers": {

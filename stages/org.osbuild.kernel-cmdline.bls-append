@@ -13,6 +13,8 @@ from urllib.parse import urlparse
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA_2 = r"""
 "options": {
   "additionalProperties": false,

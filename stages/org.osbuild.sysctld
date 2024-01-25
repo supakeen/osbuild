@@ -24,6 +24,8 @@ import sys
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = r"""
 "definitions": {
   "parameter": {

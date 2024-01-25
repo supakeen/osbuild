@@ -16,6 +16,8 @@ import sys
 import osbuild.api
 import osbuild.util.lvm2 as lvm2
 
+CAPABILITIES = []
+
 SCHEMA_2 = r"""
 "devices": {
   "type": "object",

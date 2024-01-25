@@ -18,6 +18,8 @@ import tempfile
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA_2 = r"""
 "options": {
   "additionalProperties": false,

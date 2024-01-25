@@ -45,8 +45,9 @@ import sys
 
 import osbuild.api
 
-SCHEMA = """
+CAPABILITIES = []
 
+SCHEMA = """
 "definitions": {
   "filesystem": {
     "description": "Description of how to locate a file system",

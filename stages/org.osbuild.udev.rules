@@ -21,6 +21,8 @@ from typing import Dict
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = r"""
   "definitions": {
     "value": {

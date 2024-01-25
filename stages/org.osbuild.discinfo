@@ -11,6 +11,8 @@ import time
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = """
 "additionalProperties": true,
 "required": ["basearch", "release"],

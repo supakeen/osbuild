@@ -23,6 +23,8 @@ import sys
 import osbuild.api
 from osbuild.util.lorax import Script, render_template
 
+CAPABILITIES = []
+
 SCHEMA = """
 "additionalProperties": false,
 "required": ["path"],

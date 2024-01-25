@@ -17,6 +17,7 @@ import sys
 
 from osbuild import api
 
+CAPABILITIES = []
 SCHEMA_2 = r"""
 "options": {
   "additionalProperties": false,

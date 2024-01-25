@@ -28,6 +28,8 @@ import iniparse
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = """
 "definitions": {
   "plugins": {

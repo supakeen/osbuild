@@ -15,6 +15,7 @@ CAPABILITIES = ["CAP_MAC_ADMIN"]
 ALEPH_FILENAME = ".aleph-version.json"
 COREOS_ALEPH_FILENAME = ".coreos-aleph-version.json"
 
+CAPABILITIES = []
 
 SCHEMA_2 = """
 "options": {

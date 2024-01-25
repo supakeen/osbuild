@@ -13,6 +13,8 @@ import sys
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA_2 = r"""
 "inputs": {
   "type": "object",

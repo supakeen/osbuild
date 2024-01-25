@@ -82,6 +82,8 @@ import sys
 
 import osbuild.api
 
+CAPABILITIES = []
+
 SCHEMA = """
 "additionalProperties": false,
 "oneOf": [{

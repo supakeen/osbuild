@@ -34,6 +34,8 @@ import tempfile
 import osbuild.api
 import osbuild.remoteloop as remoteloop
 
+CAPABILITIES = []
+
 SCHEMA_2 = """
 "options": {
   "additionalProperties": false,
