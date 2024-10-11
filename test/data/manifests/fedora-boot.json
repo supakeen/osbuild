@@ -1,5 +1,8 @@
 {
   "version": "2",
+  "meta": {
+    "generator": "osbuild-mpp"
+  },
   "pipelines": [
     {
       "runner": "org.osbuild.fedora39",

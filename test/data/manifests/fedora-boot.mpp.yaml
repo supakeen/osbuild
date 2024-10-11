@@ -2,6 +2,8 @@
 # Noticed the org.osbuild.test that was added.
 
 version: '2'
+meta:
+  generator: "osbuild-mpp"
 pipelines:
   - mpp-import-pipelines:
       path: fedora-vars.ipp.yaml
