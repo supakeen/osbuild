@@ -258,7 +258,7 @@ class DNF(SolverBase):
 
             try:
                 # set the packages from the last transaction as installed
-                for installed_pkg in last_transaction:
+                for installed_pkg, _ in last_transaction:
                     self.base.package_install(installed_pkg, strict=True)
 
                 # depsolve the current transaction
@@ -282,11 +282,11 @@ class DNF(SolverBase):
                 # a stable order
                 if tsi.action not in dnf.transaction.FORWARD_ACTIONS:
                     continue
-                last_transaction.append(tsi.pkg)
+                last_transaction.append((tsi.pkg, tsi.reason))
 
         packages = []
         pkg_repos = {}
-        for package in last_transaction:
+        for package, reason in last_transaction:
             packages.append({
                 "name": package.name,
                 "epoch": package.epoch,
@@ -297,6 +297,7 @@ class DNF(SolverBase):
                 "path": package.relativepath,
                 "remote_location": package.remote_location(),
                 "checksum": f"{hawkey.chksum_name(package.chksum[0])}:{package.chksum[1].hex()}",
+                "reason": reason,
             })
             # collect repository objects by id to create the 'repositories' collection for the response
             pkgrepo = package.repo
