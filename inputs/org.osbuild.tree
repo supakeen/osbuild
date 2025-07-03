@@ -12,7 +12,19 @@ import sys
 
 from osbuild import inputs
 
-SCHEMA = """
+SCHEMA = r"""
+"definitions": {
+  "metadata": {
+    "description": "Additional metadata to forward to the stage",
+    "type": "object",
+    "additionalProperties": false,
+    "patternProperties": {
+      "^\\w+[.]{1}\\w+$": {
+        "additionalProperties": false
+      }
+    }
+  }
+},
 "additionalProperties": false,
 "required": ["type", "origin", "references"],
 "properties": {
@@ -60,7 +72,12 @@ SCHEMA = """
           },
           "options": {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "properties": {
+              "metadata": {
+                "$ref": "#/definitions/metadata"
+              }
+            }
           }
         }
       }]
@@ -77,7 +94,7 @@ class TreeInput(inputs.InputService):
         # input verification *must* have been done via schema
         # verification. It is expected that origin is a pipeline
         # and we have exactly one reference, i.e. a pipeline id
-        pid, _ = refs.popitem()
+        pid, data = refs.popitem()
 
         path = None
         if pid:
@@ -86,7 +103,7 @@ class TreeInput(inputs.InputService):
         if not path:
             raise ValueError(f"Unknown pipeline '{pid}'")
 
-        reply = {"path": target}
+        reply = {"path": target, "data": data.get("metadata", {})}
         return reply
 
 
