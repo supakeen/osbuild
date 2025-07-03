@@ -465,6 +465,7 @@ class DNF5(SolverBase):
                 "sslclientkey": get_string_option(repo_cfg.get_sslclientkey_option()),
                 "sslclientcert": get_string_option(repo_cfg.get_sslclientcert_option()),
                 "sslcacert": get_string_option(repo_cfg.get_sslcacert_option()),
+                "metadata_locations": dict(repo.get_metadata_locations()),
             }
         response = {
             "solver": "dnf5",
