@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+
+from osbuild import api
+
+
+def parse_inputs(inputs):
+    return inputs["repositories"]
+
+
+def install(tree, installs, repositories):
+    repos = []
+
+    # Build repositories
+    for repository in repositories:
+        repo_id = repository["data"]["dnf.id"]
+        repo_path = pathlib.Path(repository["path"]) / "repository"
+
+        repos.extend(["--repo", repo_id])
+        repos.extend(["--repofrompath", f"{repo_id},{repo_path}"])
+
+    for install in installs:
+        dnf = ["dnf"]
+        dnf.extend(repos)
+
+        dnf.extend(["install", "--installroot", tree])
+        dnf.extend(install["specs"])
+
+
+        subprocess.run(dnf)
+
+
+def main(tree, inputs, options):
+    repositories = parse_inputs(inputs)
+    install(tree, options["actions"]["installs"], [repositories])
+
+
+if __name__ == "__main__":
+    args = api.arguments()
+
+    sys.exit(main(args["tree"], args["inputs"], args["options"]))

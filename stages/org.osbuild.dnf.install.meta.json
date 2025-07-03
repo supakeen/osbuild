@@ -1,0 +1,50 @@
+{
+  "summary": "Install packages with DNF",
+  "description": [],
+  "schema_2": {
+    "options": {
+      "additionalProperties": false,
+      "required": ["actions"],
+      "properties": {
+        "actions": {
+          "type": "object",
+          "required": ["installs"],
+          "additionalProperties": false,
+          "properties": {
+            "installs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["specs"],
+                "properties": {
+                  "specs": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositories"
+      ],
+      "properties": {
+        "repositories": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
