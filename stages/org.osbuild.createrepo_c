@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+
+from osbuild import api
+
+
+def parse_inputs(inputs):
+    return inputs["packages"], inputs["comps"]
+
+
+def create(tree, packages, comps):
+    # Set up repository location
+    repo_at = pathlib.Path(tree) / "repository"
+    repo_at.mkdir()
+
+    # Copy packages to repository location
+    packages_at = pathlib.Path(packages["path"])
+
+    for filename, metadata in packages["data"]["files"].items():
+        shutil.copy(packages_at / filename, repo_at / metadata["createrepo_c.filename"])
+
+    # Copy comps to repository location
+    comps_at = pathlib.Path(comps["path"])
+
+    # TODO put in schema
+    assert len(comps["data"]["files"]) == 1
+
+    for filename, metadata in comps["data"]["files"].items():
+        shutil.copy(comps_at / filename, repo_at / metadata["createrepo_c.filename"])
+        group_at = repo_at / metadata["createrepo_c.filename"]
+
+    # Create the repository
+    subprocess.run(["createrepo_c", "-g", str(group_at), str(repo_at)])
+
+
+def main(tree, inputs, options):
+    create(tree, *parse_inputs(inputs))
+
+
+if __name__ == "__main__":
+    args = api.arguments()
+
+    sys.exit(main(args["tree"], args["inputs"], args["options"]))

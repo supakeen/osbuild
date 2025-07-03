@@ -1,0 +1,23 @@
+{
+  "summary": "",
+  "description": [],
+  "schema_2": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packages"
+      ],
+      "properties": {
+        "packages": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "comps": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
