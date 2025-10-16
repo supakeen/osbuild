@@ -113,6 +113,8 @@ def main(tree, options):
         password = user_options.get("password")
         expiredate = user_options.get("expiredate")
         force_password_reset = user_options.get("force_password_reset", False)
+        delete_password = user_options.get("delete_password")
+        lock_password = user_options.get("lock_password")
 
         passwd = getpwnam(tree, name)
         if passwd is not None:
@@ -127,6 +129,12 @@ def main(tree, options):
             ensure_homedir(tree, name, home)
         else:
             useradd(tree, name, uid, gid, groups, description, home, shell, password, expiredate)
+
+        if delete_password:
+            subprocess.run(["passwd", "--root", tree, "-d", name], check=True)
+
+        if lock_password:
+            subprocess.run(["passwd", "--root", tree, "-l", name], check=True)
 
         if force_password_reset:
             subprocess.run(["passwd", "--root", tree, "--expire", name], check=True)

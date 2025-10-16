@@ -163,3 +163,89 @@ def test_users_with_password_reset_true(mocked_run, tmp_path, stage_module):
     args, kwargs = mocked_run.call_args_list[1]
     assert args[0] == ["passwd", "--root", tmp_path.as_posix(), "--expire", "foo"]
     assert kwargs.get("check")
+
+
+@patch("subprocess.run")
+def test_users_with_delete_password_true(mocked_run, tmp_path, stage_module):
+    make_fake_tree(tmp_path, {
+        "/etc/passwd": "",
+    })
+
+    options = {
+        "users": {
+            "foo": {
+                "delete_password": True,
+            },
+        }
+    }
+
+    stage_module.main(tmp_path.as_posix(), options)
+
+    assert len(mocked_run.call_args_list) == 2
+
+    args, kwargs = mocked_run.call_args_list[0]
+    assert args[0] == ["useradd", "--root", tmp_path.as_posix(), "foo"]
+    assert kwargs.get("check")
+
+    args, kwargs = mocked_run.call_args_list[1]
+    assert args[0] == ["passwd", "--root", tmp_path.as_posix(), "-d", "foo"]
+    assert kwargs.get("check")
+
+
+@patch("subprocess.run")
+def test_users_with_lock_password_true(mocked_run, tmp_path, stage_module):
+    make_fake_tree(tmp_path, {
+        "/etc/passwd": "",
+    })
+
+    options = {
+        "users": {
+            "foo": {
+                "lock_password": True,
+            },
+        }
+    }
+
+    stage_module.main(tmp_path.as_posix(), options)
+
+    assert len(mocked_run.call_args_list) == 2
+
+    args, kwargs = mocked_run.call_args_list[0]
+    assert args[0] == ["useradd", "--root", tmp_path.as_posix(), "foo"]
+    assert kwargs.get("check")
+
+    args, kwargs = mocked_run.call_args_list[1]
+    assert args[0] == ["passwd", "--root", tmp_path.as_posix(), "-l", "foo"]
+    assert kwargs.get("check")
+
+
+@patch("subprocess.run")
+def test_users_with_delete_and_lock_password_true(mocked_run, tmp_path, stage_module):
+    make_fake_tree(tmp_path, {
+        "/etc/passwd": "",
+    })
+
+    options = {
+        "users": {
+            "foo": {
+                "delete_password": True,
+                "lock_password": True,
+            },
+        }
+    }
+
+    stage_module.main(tmp_path.as_posix(), options)
+
+    assert len(mocked_run.call_args_list) == 3
+
+    args, kwargs = mocked_run.call_args_list[0]
+    assert args[0] == ["useradd", "--root", tmp_path.as_posix(), "foo"]
+    assert kwargs.get("check")
+
+    args, kwargs = mocked_run.call_args_list[1]
+    assert args[0] == ["passwd", "--root", tmp_path.as_posix(), "-d", "foo"]
+    assert kwargs.get("check")
+
+    args, kwargs = mocked_run.call_args_list[2]
+    assert args[0] == ["passwd", "--root", tmp_path.as_posix(), "-l", "foo"]
+    assert kwargs.get("check")

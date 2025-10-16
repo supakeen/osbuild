@@ -52,6 +52,14 @@
                   "description": "User's encrypted password, as returned by crypt(3)",
                   "type": "string"
                 },
+                "delete_password": {
+                  "description": "Delete a users password",
+                  "type": "bool"
+                },
+                "lock_password": {
+                  "description": "Lock a users password",
+                  "type": "bool"
+                },
                 "key": {
                   "description": "SSH Public Key to add to ~/.ssh/authorized_keys",
                   "type": "string"
